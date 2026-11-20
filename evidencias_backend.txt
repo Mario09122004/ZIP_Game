@@ -1,0 +1,88 @@
+(node:32439) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+c[ info ] booting application to run tests...
+(node:32479) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+
+unit / GameValidatorService (tests/unit/game_validator.spec.ts)
+  ✔ accepts a complete valid solution (1.73ms)
+  ✔ rejects a path that does not start on number 1 (0.23ms)
+  ✔ rejects diagonal movements (0.15ms)
+  ✔ rejects jumps of more than one cell (0.14ms)
+  ✔ rejects repeated cells (0.14ms)
+  ✔ rejects skipping a checkpoint (0.19ms)
+  ✔ rejects reaching the last number before covering every cell (0.12ms)
+  ✔ rejects incomplete paths (0.12ms)
+  ✔ rejects cells outside the board (0.15ms)
+
+unit / LevelGeneratorService (tests/unit/level_generator.spec.ts)
+  ✔ random Hamiltonian paths visit the 36 cells once (63.8ms)
+  ✔ generated undefined levels are solvable and respect the rules (33.62ms)
+  ✔ generated undefined levels are solvable and respect the rules (59.67ms)
+  ✔ generated undefined levels are solvable and respect the rules (51.67ms)
+  ✔ the same seed generates the same level (10.69ms)
+  ✔ hard levels score higher on average than easy levels (54.33ms)
+
+unit / ScoringService (tests/unit/scoring_hint_adaptive.spec.ts)
+  ✔ fast game without mistakes gets base + time bonus (0.26ms)
+  ✔ mistakes, hints and slow time reduce the score (0.12ms)
+  ✔ score never goes below 10% of the base (0.11ms)
+
+unit / HintService (tests/unit/scoring_hint_adaptive.spec.ts)
+  ✔ suggests the next cell of the solution (0.54ms)
+  ✔ rejects invalid paths (0.12ms)
+  ✔ empty path hints the cell with number 1 (0.23ms)
+
+unit / AdaptiveDifficultyService (tests/unit/scoring_hint_adaptive.spec.ts)
+  ✔ increases after two excellent games (0.3ms)
+  ✔ decreases after two poor games (0.13ms)
+  ✔ keeps difficulty with mixed results (0.13ms)
+  ✔ never goes above hard (0.12ms)
+[ success ] Dropped tables successfully
+[ info ] Upgrading migrations version from "1" to "2"
+❯ migrating database/migrations/1763600000001_create_users_table
+[2K[1A[2K[G❯ migrated database/migrations/1763600000001_create_users_table
+❯ migrating database/migrations/1763600000002_create_access_tokens_table
+[2K[1A[2K[G❯ migrated database/migrations/1763600000002_create_access_tokens_table
+❯ migrating database/migrations/1763600000003_create_levels_table
+[2K[1A[2K[G❯ migrated database/migrations/1763600000003_create_levels_table
+❯ migrating database/migrations/1763600000004_create_game_sessions_table
+[2K[1A[2K[G❯ migrated database/migrations/1763600000004_create_game_sessions_table
+❯ migrating database/migrations/1763600000005_create_game_moves_table
+[2K[1A[2K[G❯ migrated database/migrations/1763600000005_create_game_moves_table
+❯ migrating database/migrations/1763600000006_create_scores_table
+[2K[1A[2K[G❯ migrated database/migrations/1763600000006_create_scores_table
+
+Migrated in 1.02 s
+
+functional / Auth (tests/functional/api.spec.ts)
+  ✔ registers a player and returns a token (125.31ms)
+  ✔ returns 422 for invalid registration data (9.73ms)
+  ✔ logs in with valid credentials and rejects bad ones (188.29ms)
+  ✔ protected routes require a token (7.94ms)
+
+functional / Levels (tests/functional/api.spec.ts)
+  ✔ lists levels without exposing the solution (95.96ms)
+  ✔ returns 404 for a missing level (68.42ms)
+[18:50:56.860] WARN (32479): Row not found
+    request_id: "ww6ju4neprfzw0a73ushj2bv"
+    x-request-id: "ww6ju4neprfzw0a73ushj2bv"
+  ✔ generates and stores a new level (74.92ms)
+
+functional / Games (tests/functional/api.spec.ts)
+  ✔ full flow: start, hint, finish with a valid solution (169.01ms)
+  ✔ rejects an invalid solution with 422 (93.91ms)
+[18:50:57.290] WARN (32479): This game session is already finished
+    request_id: "opcczzzqcyqjgxrstsorac82"
+    x-request-id: "opcczzzqcyqjgxrstsorac82"
+  ✔ prevents finishing the same game twice (92.06ms)
+[18:50:57.438] WARN (32479): Game session not found
+    request_id: "vuaan4ozar7qjbdhv1kx1cx4"
+    x-request-id: "vuaan4ozar7qjbdhv1kx1cx4"
+  ✔ a player cannot finish another player game (146.42ms)
+  ✔ history and leaderboard reflect persisted results (131.44ms)
+
+ PASSED 
+
+Tests  37 passed (37)
+ Time  3s
