@@ -30,7 +30,9 @@ class _RegisterPageState extends State<RegisterPage> {
     final ok = await AppScope.of(context)
         .authController
         .register(_username.text.trim(), _email.text.trim(), _password.text);
-    if (ok && mounted) Navigator.of(context).pop(); // la raíz ya muestra el Home
+    if (ok && mounted && Navigator.of(context).canPop()) {
+      Navigator.of(context).pop();
+    }
   }
 
   @override

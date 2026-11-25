@@ -94,6 +94,7 @@ void main() {
     await tester.pump();
 
     expect(find.byKey(const Key('result_summary')), findsOneWidget);
+    expect(find.byKey(const Key('victory_confetti')), findsOneWidget);
     expect(find.text('1200 puntos'), findsOneWidget);
     await tester.pumpWidget(const SizedBox());
   });

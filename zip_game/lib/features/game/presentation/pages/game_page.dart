@@ -3,6 +3,7 @@ import 'package:material_ui/material_ui.dart';
 import '../../../../app/app_scope.dart';
 import '../../../../core/utils/formatters.dart';
 import '../controllers/game_controller.dart';
+import '../widgets/confetti_overlay.dart';
 import '../widgets/game_hud.dart';
 import '../widgets/result_summary.dart';
 import '../widgets/zip_board.dart';
@@ -56,13 +57,26 @@ class _GamePageState extends State<GamePage> {
       listenable: controller,
       builder: (context, _) {
         final level = controller.level;
+        final isVictory = controller.status == GameStatus.completed && controller.result != null;
         return Scaffold(
           appBar: AppBar(
             title: Text(level == null
                 ? 'ZIP Game'
                 : '${level.name} · ${difficultyLabel(level.difficulty)}'),
           ),
-          body: SafeArea(child: _body(context, controller)),
+          body: SafeArea(
+            child: Stack(
+              children: [
+                _body(context, controller),
+                if (isVictory)
+                  const Positioned.fill(
+                    child: IgnorePointer(
+                      child: ConfettiOverlay(key: Key('victory_confetti')),
+                    ),
+                  ),
+              ],
+            ),
+          ),
         );
       },
     );

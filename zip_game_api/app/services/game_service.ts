@@ -6,6 +6,7 @@ import GameValidatorService from '#services/game_validator_service'
 import HintService from '#services/hint_service'
 import ScoringService from '#services/scoring_service'
 import AdaptiveDifficultyService from '#services/adaptive_difficulty_service'
+import LevelGeneratorService from '#services/level_generator_service'
 import GameSessionRepository, { type MoveInput } from '#repositories/game_session_repository'
 import LevelRepository from '#repositories/level_repository'
 import ScoreRepository from '#repositories/score_repository'
@@ -32,7 +33,8 @@ export default class GameService {
     private validator: GameValidatorService,
     private hints: HintService,
     private scoring: ScoringService,
-    private adaptive: AdaptiveDifficultyService
+    private adaptive: AdaptiveDifficultyService,
+    private generator: LevelGeneratorService
   ) {}
 
   async start(user: User, levelId?: number) {
@@ -40,15 +42,16 @@ export default class GameService {
     if (levelId) {
       level = await this.levels.findOrFail(levelId)
     } else {
-      // Sin nivel => el sistema adaptativo elige uno de la dificultad recomendada
+      // Sin nivel => busca el primer nivel pendiente de la dificultad recomendada
       level =
         (await this.levels.firstPendingFor(user.id, user.recommendedDifficulty)) ??
         (await this.levels.firstPendingFor(user.id, 'easy'))
+
+      // Si no hay niveles pendientes disponibles (todos completados o no hay en BD),
+      // genera uno nuevo automáticamente para que el jugador nunca se quede sin niveles
       if (!level) {
-        throw new GameException('There are no pending levels. Generate a new one.', {
-          status: 404,
-          code: 'E_NO_LEVELS',
-        })
+        const generated = this.generator.generate(user.recommendedDifficulty)
+        level = await this.levels.create(generated)
       }
     }
 

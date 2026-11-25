@@ -18,19 +18,29 @@ class ZipGameApp extends StatefulWidget {
 
 class _ZipGameAppState extends State<ZipGameApp> {
   final _navigatorKey = GlobalKey<NavigatorState>();
+  late AuthStatus _lastStatus;
 
   @override
   void initState() {
     super.initState();
     final auth = widget.dependencies.authController;
+    _lastStatus = auth.status;
     auth.addListener(_onAuthChange);
     auth.restore();
   }
 
-  /// Si la sesión expira se regresa a la raíz (login)
+  /// Regresa a la raíz únicamente cuando ocurre una transición real de autenticación:
+  /// - De autenticado a no autenticado (logout o sesión expirada)
+  /// - De no autenticado a autenticado (login o registro completado)
+  /// No debe cerrarse la pantalla cuando solo se actualizan datos del usuario (p. ej. dificultad recomendada).
   void _onAuthChange() {
-    if (widget.dependencies.authController.status == AuthStatus.unauthenticated) {
-      _navigatorKey.currentState?.popUntil((route) => route.isFirst);
+    final status = widget.dependencies.authController.status;
+    if (status != _lastStatus) {
+      final oldStatus = _lastStatus;
+      _lastStatus = status;
+      if (oldStatus != AuthStatus.unknown) {
+        _navigatorKey.currentState?.popUntil((route) => route.isFirst);
+      }
     }
   }
 

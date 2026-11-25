@@ -190,4 +190,15 @@ test.group('Games', (group) => {
     me.assertStatus(200)
     assert.equal(me.body().stats.levels_completed, 1)
   })
+
+  test('auto-generates a new level when no pending levels are available for quick play', async ({ client, assert }) => {
+    const user = await createUser()
+    // Sin niveles creados previamente en la BD
+    const start = await client.post('/api/games').json({}).loginAs(user)
+    start.assertStatus(201)
+    assert.property(start.body(), 'session')
+    assert.property(start.body(), 'level')
+    assert.equal(start.body().level.difficulty, user.recommendedDifficulty)
+    assert.isTrue(start.body().level.is_generated)
+  })
 })
